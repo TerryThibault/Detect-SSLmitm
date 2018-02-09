@@ -81,7 +81,7 @@ function Get-GoldenHashes
         }
         catch {
             Write-Output "$uri does not support https, skipping!"
-            continue # We use a return because foreach is a cmdlet and a continue would behave like a break. 
+            continue 
         }
 		$certHashes.add($uri, $hash )
 	
