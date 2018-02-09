@@ -70,24 +70,19 @@ function Get-CertHash
 	
 }
 
-$Uris = @(
-	"www.google.com"
-	"mail.google.com"
-	"www.whitehouse.gov"
-    "www.costco.com"
-	"www.facebook.com"
-	"www.usbank.com"
-	"www.twitter.com"
-	"www.linkedin.com"
-)
-
 function Get-GoldenHashes
 {
 	$certHashes = @{}
 
-	foreach ($uri in $Uris) {
+	foreach ($uri in Get-Content .\domains.txt) {
         Write-Output "Getting golden certificate hash for $uri"
-		$hash = Get-CertHash -Uri "https://$uri"
+        try {
+		    $hash = Get-CertHash -Uri "https://$uri"
+        }
+        catch {
+            Write-Output "$uri does not support https, skipping!"
+            continue # We use a return because foreach is a cmdlet and a continue would behave like a break. 
+        }
 		$certHashes.add($uri, $hash )
 	
 	}
